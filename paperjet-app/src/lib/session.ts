@@ -39,10 +39,11 @@ export async function decrypt(session: string | Uint8Array) {
   }
 }
 
-export async function createSession(user: {id: string, isAdmin: boolean}) {
+export async function createSession(user: {id: string, tenantId: string, isAdmin: boolean}) {
   const expires = new Date(Date.now() + cookie.duration);
   const session = await encrypt({
     userId: user.id,
+    tenantId: user.tenantId,
     isAdmin: user.isAdmin,
     expires,
   });
@@ -53,6 +54,7 @@ export async function createSession(user: {id: string, isAdmin: boolean}) {
 export async function verifySession(): Promise<{
   userId: string;
   isAdmin: boolean;
+  tenantId: string;
 } | null> {
   const sessionCookie = cookies().get(cookie.name)?.value;
   const session = await decrypt(sessionCookie!);
@@ -62,6 +64,7 @@ export async function verifySession(): Promise<{
   return {
     userId: session.userId as string,
     isAdmin: session.isAdmin as boolean,
+    tenantId: session.tenantId as string,
   };
 }
 

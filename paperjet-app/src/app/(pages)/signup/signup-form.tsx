@@ -13,6 +13,11 @@ export default function SignupForm() {
 
   return (
     <form action={onSubmit}>
+      <p>Enter your company name:</p>
+      <input
+        name="tenantName"
+        placeholder="Company name"
+      />
       <p>Enter your email:</p>
       <input
         name="email"

@@ -34,6 +34,7 @@ export const getCurrentUser = cache(async () => {
 export const createUser = async (userInfo: {
   email: string;
   password: string;
+  tenantId: string;
 }) => {
   // Check if user already exists
   const existingUsers = await db
@@ -54,8 +55,9 @@ export const createUser = async (userInfo: {
     .values({
       email: userInfo.email,
       password: hashedPassword,
+      tenantId: userInfo.tenantId,
     })
-    .returning({ id: users.id, isAdmin: users.isAdmin });
+    .returning({ id: users.id, tenantId: users.tenantId, isAdmin: users.isAdmin });
 
   return user;
 };
