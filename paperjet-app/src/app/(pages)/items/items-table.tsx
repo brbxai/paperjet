@@ -8,7 +8,7 @@ import Link from "next/link";
 const columns: ColumnDef<typeof itemsSchema.$inferSelect>[] = [
   {
     accessorKey: "name",
-    header: "Status",
+    header: "Name",
     cell: ({ row }) => {
       return (
         <Link href={`/items/${row.original.id}`} className="hover:underline">

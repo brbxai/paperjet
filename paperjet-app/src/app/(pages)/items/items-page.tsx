@@ -16,8 +16,8 @@ export default function ItemsPage({
       title="Items"
       icon={Box}
       buttons={[
-        <Button variant="default" size="xs">
-          <Plus className="size-4 mr-1" />
+        <Button size="xs">
+          <Plus className="size-4 mr-2" />
           Add Item
         </Button>
       ]}

@@ -8,5 +8,5 @@ export default async function Item({ params }: { params: { id: string } }) {
     return null;
   }
   const item = await getItem(session.tenantId, params.id);
-  return item ? <ItemPage item={item} /> : null;
+  return item ? <ItemPage initialItem={item} /> : null;
 }
