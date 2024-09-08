@@ -49,7 +49,7 @@ const SidebarLayout = React.forwardRef<
           } as React.CSSProperties
         }
         className={cn(
-          "bg-accent/50 flex min-h-screen pl-0 transition-all duration-300 ease-in-out data-[sidebar=closed]:pl-0 sm:pl-[--sidebar-width]",
+          "bg-white flex min-h-screen pl-0 transition-all duration-300 ease-in-out data-[sidebar=closed]:pl-0 sm:pl-[--sidebar-width]",
           className,
         )}
         {...props}

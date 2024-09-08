@@ -1,22 +1,15 @@
 "use client";
 
 import {
-  Bird,
-  BookOpen,
-  Bot,
   Box,
-  Code2,
   FileText,
   Frame,
   LifeBuoy,
   Map,
   PieChart,
-  Rabbit,
   Send,
   SendIcon,
   Settings2,
-  SquareTerminal,
-  Turtle,
   User,
 } from "lucide-react";
 
@@ -107,7 +100,7 @@ export function AppSidebar({}) {
       <SidebarHeader>
         <Link href="/">
           <div className="flex items-center gap-1.5 overflow-hidden px-2 py-1.5 text-left text-sm transition-all">
-            <div className="bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-sm">
+            <div className="flex h-5 w-5 items-center justify-center rounded-sm">
               <SendIcon className="h-3.5 w-3.5 shrink-0" />
             </div>
             <div className="line-clamp-1 flex-1 pr-2 font-medium">Paperjet</div>
