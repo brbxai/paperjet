@@ -1,6 +1,6 @@
 "use client";
 
-import { login } from "../../../actions/users/login";
+import { login } from "@/actions/users/login";
 
 export default function LoginForm() {
 

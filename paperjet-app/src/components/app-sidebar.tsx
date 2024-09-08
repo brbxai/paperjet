@@ -116,8 +116,12 @@ export function AppSidebar({}) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarItem>
-          <SidebarLabel>Platform</SidebarLabel>
+          <SidebarLabel>Invoicing</SidebarLabel>
           <NavMain items={data.navMain} />
+        </SidebarItem>
+        <SidebarItem>
+          <SidebarLabel>Custom records</SidebarLabel>
+          <p className="text-xs ml-4 italic">Coming soon</p>
         </SidebarItem>
         <SidebarItem className="mt-auto">
           <SidebarLabel>Help</SidebarLabel>

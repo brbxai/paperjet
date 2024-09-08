@@ -31,6 +31,7 @@ export async function login(data: FormData) {
   const matchingUsers = await db
     .select({
       id: users.id,
+      tenantId: users.tenantId,
       isAdmin: users.isAdmin,
       password: users.password,
     })

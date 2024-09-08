@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import "../globals.css";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarLayout } from "@/components/ui/sidebar";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "BRBX",
@@ -15,12 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <SidebarLayout>
-          <AppSidebar />
-          {children}
-        </SidebarLayout>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

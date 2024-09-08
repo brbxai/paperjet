@@ -42,7 +42,7 @@ export const items = pgTable("items", {
     .notNull(),
   name: text("name").notNull(),
   description: text("description"),
-  defaultPrice: real("default_price").notNull(),
+  defaultPrice: real("default_price"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })
     .defaultNow()

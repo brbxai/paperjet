@@ -1,0 +1,1 @@
+ALTER TABLE "items" ALTER COLUMN "default_price" DROP NOT NULL;
