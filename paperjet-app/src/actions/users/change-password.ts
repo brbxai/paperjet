@@ -1,8 +1,8 @@
 "use server";
 
-import { users } from "@/db/schema";
+import { users } from "@db/schema";
 import { actionFailure, actionSuccess } from "@/lib/utils";
-import { db } from "@/db";
+import { db } from "@db/index";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { verifySession } from "@/lib/session";

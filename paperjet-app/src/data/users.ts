@@ -1,9 +1,9 @@
 import "server-only";
 
-import { db } from "@/db";
+import { db } from "@db/index";
 import bcrypt from "bcrypt";
 import { verifySession } from "../lib/session";
-import { users } from "@/db/schema";
+import { users } from "@db/schema";
 import { eq, getTableColumns } from "drizzle-orm";
 import { cache } from "react";
 

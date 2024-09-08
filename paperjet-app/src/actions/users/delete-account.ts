@@ -1,10 +1,10 @@
 "use server";
 
-import { db } from "@/db";
+import { db } from "@db/index";
 import { deleteSession, verifySession } from "../../lib/session";
 import { actionFailure } from "../../lib/utils";
 import bcrypt from "bcrypt";
-import { users } from "@/db/schema";
+import { users } from "@db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { redirect } from "next/navigation";
