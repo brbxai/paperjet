@@ -41,7 +41,7 @@ export const items = pgTable("items", {
     .references(() => tenants.id)
     .notNull(),
   name: text("name").notNull(),
-  description: text("description"),
+  description: text("description").notNull(),
   defaultPrice: real("default_price"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })
