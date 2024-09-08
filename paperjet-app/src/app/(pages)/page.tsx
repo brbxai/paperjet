@@ -1,30 +1,15 @@
-import { getCurrentUser } from "@/data/users";
-import { LOGIN_ROUTE, PROFILE_ROUTE } from "@/lib/config/routes";
-import Link from "next/link";
-import { HandMetal } from "lucide-react";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarLayout, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default async function Home() {
-  const user = await getCurrentUser();
-
   return (
-    <main>
-      <p>
-        Hello world! <HandMetal className="ml-2 inline size-4" />
-      </p>
-      {user && (
-        <div>
-          <p className="text-green-500">
-            You are currently signed in as user {user.email}.
-          </p>
-          <Link href={PROFILE_ROUTE}>Visit your profile</Link>
+    <SidebarLayout>
+      <AppSidebar />
+      <main className="flex flex-1 flex-col p-2 transition-all duration-300 ease-in-out">
+        <div className="h-full rounded-md border-2 border-dashed p-2">
+          <SidebarTrigger />
         </div>
-      )}
-      {!user && (
-        <div>
-          <p className="text-red-500">You are currently not signed in.</p>
-          <Link href={LOGIN_ROUTE}>Login</Link>
-        </div>
-      )}
-    </main>
+      </main>
+    </SidebarLayout>
   );
 }

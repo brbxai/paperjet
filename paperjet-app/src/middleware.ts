@@ -9,7 +9,6 @@ import {
 } from "./lib/config/routes";
 
 const unprotectedRoutes = [
-  HOME_ROUTE,
   LOGIN_ROUTE,
   SIGNUP_ROUTE,
   FORGOT_PASSWORD_ROUTE,
@@ -28,7 +27,7 @@ export async function middleware(request: NextRequest) {
   if (
     !session?.userId &&
     !unprotectedRoutes.some((route) =>
-      request.nextUrl.pathname.startsWith(route),
+      request.nextUrl.pathname === route,
     )
   ) {
     return NextResponse.redirect(new URL(LOGIN_ROUTE, request.nextUrl));
