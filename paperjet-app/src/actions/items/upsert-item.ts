@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { actionFailure, actionSuccess } from "@/lib/utils";
 import { verifySession } from "@/lib/session";
+import { revalidatePath } from "next/cache";
 
 const itemSchema = z.object({
   id: z.string().optional(),
@@ -53,6 +54,9 @@ export async function upsertItem(data: UpsertItem) {
         .where(eq(items.id, id))
         .returning();
 
+      // Refresh the item list
+      revalidatePath("/items");
+
       return actionSuccess({ item: updatedItem });
     } else {
       // Create new item
@@ -65,6 +69,9 @@ export async function upsertItem(data: UpsertItem) {
           defaultPrice,
         })
         .returning();
+
+      // Refresh the item list
+      revalidatePath("/items");
 
       return actionSuccess({ item: newItem });
     }

@@ -49,3 +49,26 @@ export const items = pgTable("items", {
     .notNull()
     .$onUpdate(() => sql`now()`),
 });
+
+export const customers = pgTable("customers", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => "customer_" + ulid()),
+  tenantId: text("tenant_id")
+    .references(() => tenants.id)
+    .notNull(),
+  name: text("name").notNull(),
+  taxId: text("tax_id").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  address: text("address").notNull(),
+  city: text("city").notNull(),
+  postalCode: text("postal_code").notNull(),
+  state: text("state").notNull(),
+  country: text("country").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "string" })
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => sql`now()`),
+});

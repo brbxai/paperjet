@@ -28,7 +28,7 @@ export default function ItemPage({
 
   return (
     <DataPage
-      title={item.name}
+      title={item.name || "New Item"}
       icon={Box}
       buttons={[
         <Button key="save" size="xs" onClick={handleSave}>
