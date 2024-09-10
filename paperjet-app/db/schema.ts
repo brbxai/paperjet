@@ -1,4 +1,4 @@
-import { boolean, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
 import { ulid } from "ulid";
 import { sql } from "drizzle-orm";
 
@@ -7,6 +7,8 @@ export const tenants = pgTable("tenants", {
     .primaryKey()
     .$defaultFn(() => "tenant_" + ulid()),
   name: text("name").notNull(),
+  invoiceNamingSeriesTemplate: text("invoice_naming_series_template").default("INV-.####").notNull(),
+  creditNoteNamingSeriesTemplate: text("credit_note_naming_series_template").default("CN-.####").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })
     .defaultNow()
@@ -66,6 +68,22 @@ export const customers = pgTable("customers", {
   postalCode: text("postal_code").notNull(),
   state: text("state").notNull(),
   country: text("country").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "string" })
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => sql`now()`),
+});
+
+export const namingSeries = pgTable("naming_series", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => "naming_series_" + ulid()),
+  tenantId: text("tenant_id")
+    .references(() => tenants.id)
+    .notNull(),
+  template: text("template").notNull(),
+  lastNumber: integer("last_number").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })
     .defaultNow()
