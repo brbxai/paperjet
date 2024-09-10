@@ -39,7 +39,7 @@ export const DataPage = ({
   return (
     <main className="flex flex-1 flex-col transition-all duration-300 ease-in-out">
       <SidebarHeader icon={icon} title={title} buttons={buttons} />
-      <div className="px-4 py-2">{children}</div>
+      <div className="p-2">{children}</div>
     </main>
   );
 };
