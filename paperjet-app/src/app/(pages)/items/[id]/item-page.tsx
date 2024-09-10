@@ -8,6 +8,7 @@ import { Box, Save } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { upsertItem } from "@/actions/items/upsert-item";
+import { toast } from "sonner"
 
 export default function ItemPage({
   initialItem,
@@ -19,9 +20,9 @@ export default function ItemPage({
   const handleSave = async () => {
     const result = await upsertItem(item);
     if (result.success) {
-      alert("Item saved successfully"); // TODO: replace with toast
+      toast.success("The item has been saved successfully.");
     } else {
-      alert("Failed to save item: " + JSON.stringify(result.errors)); // TODO: replace with toast
+      toast.error("Failed to save item.");
     }
   };
 
