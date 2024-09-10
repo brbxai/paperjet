@@ -25,6 +25,7 @@ import {
   SidebarLabel,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { CUSTOMERS_ROUTE, INVOICES_ROUTE, ITEMS_ROUTE } from "@/lib/config/routes";
 const data = {
   user: {
     name: "Daan",
@@ -33,17 +34,17 @@ const data = {
   navMain: [
     {
       title: "Customers",
-      url: "/customers",
+      url: CUSTOMERS_ROUTE,
       icon: User,
     },
     {
       title: "Items",
-      url: "/items",
+      url: ITEMS_ROUTE,
       icon: Box,
     },
     {
       title: "Invoices",
-      url: "/invoices",
+      url: INVOICES_ROUTE,
       icon: FileText,
     },
     {

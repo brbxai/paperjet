@@ -10,18 +10,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { upsertCustomer } from "@/actions/customers/upsert-customer";
 import { toast } from "sonner"
+import { useRouter } from "next/navigation";
+import { customerRoute } from "@/lib/config/routes";
 
 export default function CustomerPage({
   initialCustomer,
 }: {
-  initialCustomer: typeof customersSchema.$inferSelect;
+  initialCustomer: typeof customersSchema.$inferInsert;
 }) {
+  const router = useRouter();
   const [customer, setCustomer] = useState(initialCustomer);
 
   const handleSave = async () => {
     const result = await upsertCustomer(customer);
     if (result.success) {
       toast.success("The customer has been saved successfully.");
+      // Navigate to the new customer
+      router.push(customerRoute(result.customer.id));
     } else {
       toast.error("Failed to save customer.");
     }

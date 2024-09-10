@@ -1,4 +1,4 @@
-import { boolean, integer, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, decimal, text, timestamp } from "drizzle-orm/pg-core"; // TODO: Use decimal instead of real?
 import { ulid } from "ulid";
 import { sql } from "drizzle-orm";
 
@@ -44,7 +44,7 @@ export const items = pgTable("items", {
     .notNull(),
   name: text("name").notNull(),
   description: text("description").notNull(),
-  defaultPrice: real("default_price"),
+  defaultPrice: decimal("default_price"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })
     .defaultNow()
@@ -84,6 +84,52 @@ export const namingSeries = pgTable("naming_series", {
     .notNull(),
   template: text("template").notNull(),
   lastNumber: integer("last_number").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "string" })
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => sql`now()`),
+});
+
+export const invoices = pgTable("invoices", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => "invoice_" + ulid()),
+  tenantId: text("tenant_id")
+    .references(() => tenants.id)
+    .notNull(),
+  customerId: text("customer_id")
+    .references(() => customers.id)
+    .notNull(),
+  documentReference: text("document_reference").notNull(),
+  issueDate: timestamp("issue_date").notNull(),
+  dueDate: timestamp("due_date").notNull(),
+  totalAmountBeforeTax: decimal("total_amount_before_tax").notNull(),
+  taxAmount: decimal("tax_amount").notNull(),
+  totalAmountAfterTax: decimal("total_amount_after_tax").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "string" })
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => sql`now()`),
+});
+
+export const invoiceLines = pgTable("invoice_lines", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => "invoice_line_" + ulid()),
+  invoiceId: text("invoice_id")
+    .references(() => invoices.id)
+    .notNull(),
+  itemId: text("item_id")
+    .references(() => items.id)
+    .notNull(),
+  description: text("description").notNull(),
+  quantity: decimal("quantity").notNull(),
+  unitPrice: decimal("unit_price").notNull(),
+  amountBeforeTax: decimal("amount_before_tax").notNull(),
+  taxAmount: decimal("tax_amount").notNull(),
+  amountAfterTax: decimal("amount_after_tax").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })
     .defaultNow()

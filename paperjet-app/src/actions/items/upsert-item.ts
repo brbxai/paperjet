@@ -7,12 +7,13 @@ import { z } from "zod";
 import { actionFailure, actionSuccess } from "@/lib/utils";
 import { verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
+import { ITEMS_ROUTE } from "@/lib/config/routes";
 
 const itemSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: "Name is required" }),
   description: z.string(),
-  defaultPrice: z.number().nullable(),
+  defaultPrice: z.string().nullable(),
 });
 
 export type UpsertItem = z.infer<typeof itemSchema>;
@@ -55,7 +56,7 @@ export async function upsertItem(data: UpsertItem) {
         .returning();
 
       // Refresh the item list
-      revalidatePath("/items");
+      revalidatePath(ITEMS_ROUTE);
 
       return actionSuccess({ item: updatedItem });
     } else {
@@ -71,7 +72,7 @@ export async function upsertItem(data: UpsertItem) {
         .returning();
 
       // Refresh the item list
-      revalidatePath("/items");
+      revalidatePath(ITEMS_ROUTE);
 
       return actionSuccess({ item: newItem });
     }

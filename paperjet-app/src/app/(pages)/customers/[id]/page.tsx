@@ -8,7 +8,7 @@ export default async function Customer({ params }: { params: { id: string } }) {
   if (!session?.userId) {
     return null;
   }
-  let customer: (typeof customers.$inferSelect);
+  let customer: (typeof customers.$inferInsert);
   if(params.id === "new") {
     customer = {
       id: "",
@@ -22,7 +22,7 @@ export default async function Customer({ params }: { params: { id: string } }) {
       postalCode: "",
       state: "",
       country: "",
-    } as (typeof customers.$inferSelect);
+    } as (typeof customers.$inferInsert);
   } else {
     customer = await getCustomer(session.tenantId, params.id);
   }

@@ -3,24 +3,31 @@
 import { DataPage } from "@/components/ui/data-page";
 import { InputWithLabel } from "@/components/ui/input-with-label";
 import { InputGroup } from "@/components/ui/input-group";
-import { items as itemsSchema } from "@db/schema";
 import { Box, Save } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { upsertItem } from "@/actions/items/upsert-item";
 import { toast } from "sonner"
+import { useRouter } from "next/navigation";
+import { itemRoute } from "@/lib/config/routes";
+import { parseItemForBackend, parseItemForFrontend } from "@/lib/items";
+import Decimal from "decimal.js";
+import { SerializedItem } from "@/data/items";
 
 export default function ItemPage({
   initialItem,
 }: {
-  initialItem: typeof itemsSchema.$inferSelect;
+  initialItem: SerializedItem;
 }) {
-  const [item, setItem] = useState(initialItem);
+  const router = useRouter();
+  const [item, setItem] = useState(parseItemForFrontend(initialItem));
 
   const handleSave = async () => {
-    const result = await upsertItem(item);
+    const result = await upsertItem(parseItemForBackend(item));
     if (result.success) {
       toast.success("The item has been saved successfully.");
+      // Navigate to the new item
+      router.push(itemRoute(result.item.id));
     } else {
       toast.error("Failed to save item.");
     }
@@ -61,7 +68,7 @@ export default function ItemPage({
           onChange={(e) =>
             setItem({
               ...item,
-              defaultPrice: parseFloat((e.target as any).value) || null,
+              defaultPrice: new Decimal((e.target as any).value),
             })
           }
         />

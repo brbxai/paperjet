@@ -17,6 +17,13 @@ const columns: ColumnDef<typeof itemsSchema.$inferSelect>[] = [
       );
     },
   },
+  {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => {
+      return row.original.description;
+    },
+  },  
 ];
 
 export default function ItemsTable({

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { actionFailure, actionSuccess } from "@/lib/utils";
 import { verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
+import { CUSTOMERS_ROUTE } from "@/lib/config/routes";
 
 const customerSchema = z.object({
   id: z.string().optional(),
@@ -57,7 +58,7 @@ export async function upsertCustomer(data: UpsertCustomer) {
         .returning();
 
       // Refresh the customer list
-      revalidatePath("/customers");
+      revalidatePath(CUSTOMERS_ROUTE);
 
       return actionSuccess({ customer: updatedCustomer });
     } else {
@@ -71,7 +72,7 @@ export async function upsertCustomer(data: UpsertCustomer) {
         .returning();
 
       // Refresh the customer list
-      revalidatePath("/customers");
+      revalidatePath(CUSTOMERS_ROUTE);
 
       return actionSuccess({ customer: newCustomer });
     }

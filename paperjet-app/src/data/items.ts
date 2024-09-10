@@ -4,6 +4,18 @@ import { db } from "@db/index";
 import { items } from "@db/schema";
 import { and, eq, asc } from "drizzle-orm";
 import { cache } from "react";
+import Decimal from "decimal.js";
+
+export type Item = {
+  id: string;
+  name: string;
+  description: string;
+  defaultPrice: Decimal | null;
+}
+
+export type SerializedItem = Omit<Item, "defaultPrice"> & {
+  defaultPrice: string | null;
+}
 
 export const getItems = cache(async (tenantId: string) => {
   return await db

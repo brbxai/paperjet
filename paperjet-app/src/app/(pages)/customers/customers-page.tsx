@@ -6,6 +6,7 @@ import { User, Plus } from "lucide-react";
 import CustomersTable from "./customers-table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { NEW_CUSTOMER_ROUTE } from "@/lib/config/routes";
 
 export default function CustomersPage({
   customers,
@@ -17,7 +18,7 @@ export default function CustomersPage({
       title="Customers"
       icon={User}
       buttons={[
-        <Link href="/customers/new" key="new-customer">
+        <Link href={NEW_CUSTOMER_ROUTE} key="new-customer">
           <Button size="xs">
             <Plus className="size-4 mr-2" />
             Add Customer
