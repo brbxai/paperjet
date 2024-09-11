@@ -78,6 +78,7 @@ export async function upsertInvoice(data: UpsertInvoice) {
           .values({
             tenantId: session.tenantId,
             documentReference: await generateDocumentReference(
+              tx,
               session.tenantId,
               documentReferenceTemplate.invoiceNamingSeriesTemplate,
               invoiceData.issueDate,

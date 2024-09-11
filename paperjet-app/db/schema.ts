@@ -1,4 +1,13 @@
-import { boolean, integer, pgTable, decimal, text, timestamp } from "drizzle-orm/pg-core"; // TODO: Use decimal instead of real?
+import {
+  boolean,
+  integer,
+  pgTable,
+  decimal,
+  text,
+  timestamp,
+  pgEnum,
+  pgSchema,
+} from "drizzle-orm/pg-core"; // TODO: Use decimal instead of real?
 import { ulid } from "ulid";
 import { sql } from "drizzle-orm";
 
@@ -7,8 +16,12 @@ export const tenants = pgTable("tenants", {
     .primaryKey()
     .$defaultFn(() => "tenant_" + ulid()),
   name: text("name").notNull(),
-  invoiceNamingSeriesTemplate: text("invoice_naming_series_template").default("INV-.####").notNull(),
-  creditNoteNamingSeriesTemplate: text("credit_note_naming_series_template").default("CN-.####").notNull(),
+  invoiceNamingSeriesTemplate: text("invoice_naming_series_template")
+    .default("INV-.####")
+    .notNull(),
+  creditNoteNamingSeriesTemplate: text("credit_note_naming_series_template")
+    .default("CN-.####")
+    .notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })
     .defaultNow()
@@ -136,3 +149,47 @@ export const invoiceLines = pgTable("invoice_lines", {
     .notNull()
     .$onUpdate(() => sql`now()`),
 });
+
+export const customTables = pgTable("custom_tables", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => "crt_" + ulid()),
+  tenantId: text("tenant_id")
+    .references(() => tenants.id)
+    .notNull(),
+  uid: text("uid").notNull(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "string" })
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => sql`now()`),
+});
+
+export const customTableColumnTypes = pgEnum("custom_table_column_types", [
+  "text",
+  "float8",
+  "date",
+  "boolean",
+]);
+
+export const customTableColumns = pgTable("custom_table_columns", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => "crtc_" + ulid()),
+  customTableId: text("custom_table_id")
+    .references(() => customTables.id)
+    .notNull(),
+  uid: text("uid").notNull(),
+  idx: integer("idx").notNull(),
+  name: text("name").notNull(),
+  type: customTableColumnTypes("type").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "string" })
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => sql`now()`),
+});
+
+export const customTablesSchema = pgSchema("custom_tables");

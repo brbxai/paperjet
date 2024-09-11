@@ -13,6 +13,10 @@ export const CUSTOMERS_ROUTE = "/customers";
 export const NEW_CUSTOMER_ROUTE = "/customers/new";
 export const customerRoute = (id: string) => `/customers/${id}`;
 
+export const CUSTOM_TABLES_ROUTE = "/custom-tables";
+export const NEW_CUSTOM_TABLE_ROUTE = "/custom-tables/new";
+export const customTableRoute = (id: string) => `/custom-tables/${id}`;
+
 export const ITEMS_ROUTE = "/items";
 export const NEW_ITEM_ROUTE = "/items/new";
 export const itemRoute = (id: string) => `/items/${id}`;

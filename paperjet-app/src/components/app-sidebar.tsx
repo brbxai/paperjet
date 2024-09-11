@@ -25,7 +25,7 @@ import {
   SidebarLabel,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { CUSTOMERS_ROUTE, INVOICES_ROUTE, ITEMS_ROUTE } from "@/lib/config/routes";
+import { CUSTOM_TABLES_ROUTE, CUSTOMERS_ROUTE, INVOICES_ROUTE, ITEMS_ROUTE } from "@/lib/config/routes";
 const data = {
   user: {
     name: "Daan",
@@ -60,6 +60,10 @@ const data = {
           title: "Users",
           url: "#",
         },
+        {
+          title: "Custom tables",
+          url: CUSTOM_TABLES_ROUTE,
+        }
       ],
     },
   ],
