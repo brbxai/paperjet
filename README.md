@@ -1,4 +1,6 @@
-# Paperjet
+<p align="center"><img src="./paperjet.png" width="80" ></p>
+<h1 align="center">Paperjet</h1>
+
 A simple yet flexible, open source, invoicing solution for small businesses.
 
 **Why?** We fundamentally believe businesses should have full ownership and control over their most important data like customer records, quotes and invoices.
