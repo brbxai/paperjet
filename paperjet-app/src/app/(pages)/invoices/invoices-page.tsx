@@ -1,6 +1,6 @@
 "use client";
 
-import { DataPage } from "@/components/ui/data-page";
+import { DataPage } from "@/components/data-page";
 import { invoices as invoicesSchema } from "@db/schema";
 import { FileText, Plus } from "lucide-react";
 import InvoicesTable from "./invoices-table";

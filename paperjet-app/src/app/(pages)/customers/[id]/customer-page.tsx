@@ -1,9 +1,9 @@
 "use client";
 
-import { DataPage } from "@/components/ui/data-page";
-import { InputWithLabel } from "@/components/ui/input-with-label";
-import { InputGroup } from "@/components/ui/input-group";
-import { InputSubgroup } from "@/components/ui/input-subgroup";
+import { DataPage } from "@/components/data-page";
+import { InputWithLabel } from "@/components/input-with-label";
+import { InputGroup } from "@/components/input-group";
+import { InputSubgroup } from "@/components/input-subgroup";
 import { customers as customersSchema } from "@db/schema";
 import { User, Save } from "lucide-react";
 import { useState } from "react";

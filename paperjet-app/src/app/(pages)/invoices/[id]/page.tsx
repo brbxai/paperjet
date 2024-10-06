@@ -1,17 +1,21 @@
 import { getInvoice, SerializedInvoice } from "@/data/invoices";
 import InvoicePage from "./invoice-page";
 import { verifySession } from "@/lib/session";
+import { getCustomers } from "@/data/customers";
 
 export default async function Invoice({ params }: { params: { id: string } }) {
   const session = await verifySession();
   if (!session?.userId) {
     return null;
   }
+
+  const customers = await getCustomers(session.tenantId);
+
   let invoice: SerializedInvoice;
   if (params.id === "new") {
     invoice = {
       id: "",
-      customerId: "customer_01J7EDJFEMYHPJFXKAPCKQCHFN", // TODO: Don't hardcode customer, provide customer selection dropdown
+      customerId: "",
       documentReference: "",
       issueDate: new Date(),
       dueDate: new Date(),
@@ -22,5 +26,8 @@ export default async function Invoice({ params }: { params: { id: string } }) {
   } else {
     invoice = await getInvoice(session.tenantId, params.id);
   }
-  return invoice ? <InvoicePage initialInvoice={invoice} /> : null;
+  return invoice ? <InvoicePage
+    initialInvoice={invoice}
+    customers={customers}
+  /> : null;
 }

@@ -1,9 +1,9 @@
 "use client";
 
-import { DataPage } from "@/components/ui/data-page";
-import { InputWithLabel } from "@/components/ui/input-with-label";
-import { InputGroup } from "@/components/ui/input-group";
-import { InputSubgroup } from "@/components/ui/input-subgroup";
+import { DataPage } from "@/components/data-page";
+import { InputWithLabel } from "@/components/input-with-label";
+import { InputGroup } from "@/components/input-group";
+import { InputSubgroup } from "@/components/input-subgroup";
 import { FileText, Save } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,11 +13,15 @@ import { SerializedInvoice, Invoice } from "@/data/invoices";
 import { parseInvoiceForBackend, parseInvoiceForFrontend } from "@/lib/invoices";
 import { useRouter } from "next/navigation";
 import { invoiceRoute } from "@/lib/config/routes";
+import { Customer } from "@/data/customers";
+import { CustomersCombobox } from "@/components/customers-combobox";
 
 export default function InvoicePage({
   initialInvoice,
+  customers,
 }: {
   initialInvoice: SerializedInvoice;
+  customers: Customer[];
 }) {
   const router = useRouter();
   const [invoice, setInvoice] = useState<Invoice>(parseInvoiceForFrontend(initialInvoice));
@@ -46,6 +50,11 @@ export default function InvoicePage({
     >
       <InputGroup title="Invoice Information" withSubgroups>
         <InputSubgroup title="Basic Details">
+          <CustomersCombobox
+            customers={customers}
+            value={invoice.customerId}
+            onChange={(customerId) => setInvoice({ ...invoice, customerId })}
+          />
           <InputWithLabel
             label="Issue Date"
             name="issueDate"
@@ -61,6 +70,9 @@ export default function InvoicePage({
             onChange={(e) => setInvoice({ ...invoice, dueDate: new Date((e.target as any).value) })}
           />
         </InputSubgroup>
+      </InputGroup>
+      <InputGroup title="Items" withSubgroups>
+        <p>Items go here...</p>
       </InputGroup>
     </DataPage>
   );

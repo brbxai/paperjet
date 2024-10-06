@@ -1,8 +1,8 @@
 "use client";
 
-import { DataPage } from "@/components/ui/data-page";
-import { InputWithLabel } from "@/components/ui/input-with-label";
-import { InputGroup } from "@/components/ui/input-group";
+import { DataPage } from "@/components/data-page";
+import { InputWithLabel } from "@/components/input-with-label";
+import { InputGroup } from "@/components/input-group";
 import { Box, Save } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";

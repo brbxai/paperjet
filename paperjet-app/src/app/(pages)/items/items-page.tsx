@@ -1,6 +1,6 @@
 "use client";
 
-import { DataPage } from "@/components/ui/data-page";
+import { DataPage } from "@/components/data-page";
 import { items as itemsSchema } from "@db/schema";
 import { Box, Plus } from "lucide-react";
 import ItemsTable from "./items-table";

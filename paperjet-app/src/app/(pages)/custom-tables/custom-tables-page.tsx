@@ -1,6 +1,6 @@
 "use client";
 
-import { DataPage } from "@/components/ui/data-page";
+import { DataPage } from "@/components/data-page";
 import { customTables as customTablesSchema } from "@db/schema";
 import { Database, Plus } from "lucide-react";
 import CustomTablesTable from "./custom-tables-table";

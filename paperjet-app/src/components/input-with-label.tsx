@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Input, InputProps } from "./input";
+import { Input, InputProps } from "./ui/input";
 import { cn } from "@/lib/utils";
 import { HelpCircle } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface InputWithLabelProps extends InputProps {
   label: string;
