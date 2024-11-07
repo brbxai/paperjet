@@ -18,6 +18,7 @@ import { CustomersCombobox } from "@/components/customers-combobox";
 import InvoiceLinesEditor from "./invoice-lines-editor";
 import { SerializedItem } from "@/data/items";
 import Link from "next/link";
+import { stringifyActionFailure } from "@/lib/utils";
 
 export default function InvoicePage({
   initialInvoice,
@@ -38,8 +39,7 @@ export default function InvoicePage({
       // Navigate to the new invoice
       router.push(invoiceRoute(result.invoice.id));
     } else {
-      console.error(result)
-      toast.error("Failed to save invoice.");
+      toast.error(stringifyActionFailure(result.errors));
     }
   };
 

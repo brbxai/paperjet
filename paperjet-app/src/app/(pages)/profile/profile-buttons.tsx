@@ -49,7 +49,7 @@ export default function ProfileButtons({
         if (password) {
           const deleteAccountResult = await deleteAccount(user.id, password);
           if (deleteAccountResult?.errors) {
-            alert(deleteAccountResult.errors.root.join(", "));
+            alert(deleteAccountResult.errors.root?.join(", "));
           }
         }
       }}

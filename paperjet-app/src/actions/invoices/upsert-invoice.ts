@@ -15,21 +15,21 @@ import { PostgresJsQueryResultHKT } from "drizzle-orm/postgres-js";
 
 const invoiceSchema = z.object({
   id: z.string().optional(),
-  customerId: z.string(),
-  issueDate: z.date(),
-  dueDate: z.date(),
-  totalAmountBeforeTax: z.string(),
-  taxAmount: z.string(),
-  totalAmountAfterTax: z.string(),
+  customerId: z.string({message: "Customer is required"}),
+  issueDate: z.date({message: "Issue date is required"}),
+  dueDate: z.date({message: "Due date is required"}),
+  totalAmountBeforeTax: z.string({message: "Total amount before tax is required"}),
+  taxAmount: z.string({message: "Tax amount is required"}),
+  totalAmountAfterTax: z.string({message: "Total amount after tax is required"}),
   lines: z.array(z.object({
     id: z.string(),
-    itemId: z.string(),
-    description: z.string(),
-    quantity: z.string(),
-    unitPrice: z.string(),
-    amountBeforeTax: z.string(),
-    taxAmount: z.string(),
-    amountAfterTax: z.string(),
+    itemId: z.string().min(1, "Item is required"),
+    description: z.string({message: "Description is required"}),
+    quantity: z.string({message: "Quantity is required"}),
+    unitPrice: z.string({message: "Unit price is required"}),
+    amountBeforeTax: z.string({message: "Amount before tax is required"}),
+    taxAmount: z.string({message: "Tax amount is required"}),
+    amountAfterTax: z.string({message: "Amount after tax is required"}),
   })),
 });
 
@@ -43,7 +43,8 @@ export async function upsertInvoice(data: UpsertInvoice) {
 
   const validated = invoiceSchema.safeParse(data);
   if (!validated.success) {
-    return actionFailure("Failed to validate invoice");
+    console.log(validated.error)
+    return actionFailure(validated.error);
   }
 
   const { id, ...invoiceData } = validated.data;
@@ -113,7 +114,6 @@ export async function upsertInvoice(data: UpsertInvoice) {
       }
     });
   } catch (error) {
-    console.error("Error upserting invoice:", error);
     return actionFailure("Failed to upsert invoice");
   }
 }

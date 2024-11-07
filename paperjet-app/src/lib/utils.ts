@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import Decimal from "decimal.js";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -16,16 +17,36 @@ export function actionSuccess<T = {}>(
   };
 }
 
-export function actionFailure(...generalErrors: string[]): {
+export function actionFailure(
+  ...errors: { [key: string]: string[] }[] | z.ZodError[] | string[]
+): {
   success: false;
-  errors: { root: string[] };
+  errors: { [key: string]: string[] | undefined };
 } {
+  let resultingErrors: { [key: string]: string[] | undefined };
+
+  if (errors[0] instanceof z.ZodError) {
+    resultingErrors = (errors[0] as z.ZodError).flatten().fieldErrors;
+  } else if (Array.isArray(errors[0])) {
+    resultingErrors = errors[0] as { [key: string]: string[] };
+  } else {
+    resultingErrors = { root: errors as string[] };
+  }
+
   return {
     success: false,
-    errors: {
-      root: generalErrors,
-    },
+    errors: resultingErrors,
   };
+}
+
+export function stringifyActionFailure(errors: {
+  [key: string]: string[] | undefined;
+}): string {
+  const resultingErrors = Object.values(errors)
+    .filter((v) => v !== undefined)
+    .flat();
+
+  return resultingErrors ? " " + resultingErrors.join(", ") : "";
 }
 
 export function formatCurrency(amount: Decimal) {
