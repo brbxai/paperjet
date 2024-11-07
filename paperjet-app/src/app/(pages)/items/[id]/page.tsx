@@ -2,7 +2,8 @@ import { getItem, SerializedItem } from "@/data/items";
 import ItemPage from "./item-page";
 import { verifySession } from "@/lib/session";
 
-export default async function Item({ params }: { params: { id: string } }) {
+export default async function Item(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const session = await verifySession();
   if (!session?.userId) {
     return null;

@@ -3,7 +3,8 @@ import CustomTablePage from "./custom-table-page";
 import { verifySession } from "@/lib/session";
 import { UpsertCustomTable } from "@/actions/custom-tables/upsert-custom-table";
 
-export default async function CustomTable({ params }: { params: { id: string } }) {
+export default async function CustomTable(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const session = await verifySession();
   if (!session?.userId) {
     return null;

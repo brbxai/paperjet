@@ -5,7 +5,7 @@ import { deleteSession } from "@/lib/session";
 
 export async function logout() {
   // Delete session
-  deleteSession();
+  await deleteSession();
 
   // Redirect to login page
   redirect("/login");

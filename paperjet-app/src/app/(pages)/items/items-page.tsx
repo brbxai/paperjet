@@ -18,7 +18,7 @@ export default function ItemsPage({
       title="Items"
       icon={Box}
       buttons={[
-        <Link href={NEW_ITEM_ROUTE}>
+        <Link href={NEW_ITEM_ROUTE} key="add">
           <Button size="xs">
             <Plus className="size-4 mr-2" />
             Add Item

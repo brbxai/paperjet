@@ -5,7 +5,8 @@ import { getCustomers } from "@/data/customers";
 import { addMonths } from "date-fns";
 import { getItems } from "@/data/items";
 
-export default async function Invoice({ params }: { params: { id: string } }) {
+export default async function Invoice(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const session = await verifySession();
   if (!session?.userId) {
     return null;

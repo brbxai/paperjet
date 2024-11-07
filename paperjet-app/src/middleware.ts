@@ -15,7 +15,7 @@ const unprotectedRoutes = [
 ];
 
 export async function middleware(request: NextRequest) {
-  const cookie = cookies().get("session")?.value;
+  const cookie = (await cookies()).get("session")?.value;
   if (!cookie) {
     console.warn("Session cookie is missing");
   }

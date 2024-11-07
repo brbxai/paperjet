@@ -3,7 +3,8 @@ import CustomerPage from "./customer-page";
 import { verifySession } from "@/lib/session";
 import { customers } from "@db/schema";
 
-export default async function Customer({ params }: { params: { id: string } }) {
+export default async function Customer(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const session = await verifySession();
   if (!session?.userId) {
     return null;

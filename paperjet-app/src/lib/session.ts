@@ -48,7 +48,7 @@ export async function createSession(user: {id: string, tenantId: string, isAdmin
     expires,
   });
 
-  cookies().set(cookie.name, session, { ...cookie.options, expires });
+  (await cookies()).set(cookie.name, session, { ...cookie.options, expires });
 }
 
 export async function verifySession(): Promise<{
@@ -56,7 +56,7 @@ export async function verifySession(): Promise<{
   isAdmin: boolean;
   tenantId: string;
 } | null> {
-  const sessionCookie = cookies().get(cookie.name)?.value;
+  const sessionCookie = (await cookies()).get(cookie.name)?.value;
   const session = await decrypt(sessionCookie!);
   if (!session?.userId) {
     return null;
@@ -68,6 +68,6 @@ export async function verifySession(): Promise<{
   };
 }
 
-export function deleteSession() {
-  cookies().delete(cookie.name);
+export async function deleteSession() {
+  (await cookies()).delete(cookie.name);
 }
