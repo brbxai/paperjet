@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import Decimal from "decimal.js";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -25,4 +26,17 @@ export function actionFailure(...generalErrors: string[]): {
       root: generalErrors,
     },
   };
+}
+
+export function formatCurrency(amount: Decimal) {
+  return `€ ${amount.toFixed()}`;
+}
+
+export function parseInputDecimal(value: string) {
+  try {
+    const cleanedValue = value.toString().replace(",", ".").replace(/[^\d.-]/g, "");
+    return new Decimal(cleanedValue);
+  } catch {
+    return new Decimal(0);
+  }
 }

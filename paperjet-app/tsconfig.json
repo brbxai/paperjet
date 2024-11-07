@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES6",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -12,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "forceConsistentCasingInFileNames": true,
     "plugins": [
       {
         "name": "next"
@@ -20,7 +22,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "@db/*": ["./db/*"]
-    }
+    },
+    "types": ["react", "dom"],
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

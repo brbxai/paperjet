@@ -8,6 +8,7 @@ export const FORGOT_PASSWORD_ROUTE = "/reset-password";
 export const INVOICES_ROUTE = "/invoices";
 export const NEW_INVOICE_ROUTE = "/invoices/new";
 export const invoiceRoute = (id: string) => `/invoices/${id}`;
+export const printInvoiceRoute = (id: string) => `/invoices/${id}/print`;
 
 export const CUSTOMERS_ROUTE = "/customers";
 export const NEW_CUSTOMER_ROUTE = "/customers/new";

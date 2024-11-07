@@ -58,7 +58,7 @@ export function Combobox({
             return 0;
           }}
         >
-          <CommandInput placeholder="Zoeken..." />
+          <CommandInput placeholder="Search..." />
           <CommandList>
             <CommandEmpty>{noResultsLabel}</CommandEmpty>
             <CommandGroup>

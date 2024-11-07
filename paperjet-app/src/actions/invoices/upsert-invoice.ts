@@ -1,14 +1,17 @@
 "use server";
 
 import { db } from "@db/index";
-import { invoices, tenants } from "@db/schema";
-import { eq } from "drizzle-orm";
+import { invoiceLines, invoices, tenants } from "@db/schema";
+import { eq, ExtractTablesWithRelations } from "drizzle-orm";
 import { z } from "zod";
 import { actionFailure, actionSuccess } from "@/lib/utils";
 import { verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { generateDocumentReference } from "@/lib/naming-series";
 import { INVOICES_ROUTE } from "@/lib/config/routes";
+import { SerializedInvoiceLine } from "@/data/invoices";
+import { PgTransaction } from "drizzle-orm/pg-core";
+import { PostgresJsQueryResultHKT } from "drizzle-orm/postgres-js";
 
 const invoiceSchema = z.object({
   id: z.string().optional(),
@@ -18,6 +21,16 @@ const invoiceSchema = z.object({
   totalAmountBeforeTax: z.string(),
   taxAmount: z.string(),
   totalAmountAfterTax: z.string(),
+  lines: z.array(z.object({
+    id: z.string(),
+    itemId: z.string(),
+    description: z.string(),
+    quantity: z.string(),
+    unitPrice: z.string(),
+    amountBeforeTax: z.string(),
+    taxAmount: z.string(),
+    amountAfterTax: z.string(),
+  })),
 });
 
 export type UpsertInvoice = z.infer<typeof invoiceSchema>;
@@ -56,6 +69,9 @@ export async function upsertInvoice(data: UpsertInvoice) {
           .where(eq(invoices.id, id))
           .returning();
 
+        // Update invoice lines
+        await upsertInvoiceLines(tx, id, invoiceData.lines);
+
         // Refresh the invoice list
         revalidatePath(INVOICES_ROUTE);
 
@@ -87,6 +103,9 @@ export async function upsertInvoice(data: UpsertInvoice) {
           })
           .returning();
 
+        // Insert invoice lines
+        await upsertInvoiceLines(tx, newInvoice.id, invoiceData.lines);
+
         // Refresh the invoice list
         revalidatePath(INVOICES_ROUTE);
 
@@ -96,5 +115,41 @@ export async function upsertInvoice(data: UpsertInvoice) {
   } catch (error) {
     console.error("Error upserting invoice:", error);
     return actionFailure("Failed to upsert invoice");
+  }
+}
+
+async function upsertInvoiceLines(
+  tx: PgTransaction<PostgresJsQueryResultHKT, typeof import("@db/schema"), ExtractTablesWithRelations<typeof import("@db/schema")>>,
+  invoiceId: string,
+  lines: Omit<SerializedInvoiceLine, "invoiceId">[],
+) {
+  const existingLineIds = new Set<string>();
+  (await tx.select({
+    id: invoiceLines.id,
+  }).from(invoiceLines)
+    .where(eq(invoiceLines.invoiceId, invoiceId))
+  ).forEach((line) => existingLineIds.add(line.id));
+
+  for (const line of lines) {
+    if (existingLineIds.has(line.id)) {
+      await tx.update(invoiceLines)
+        .set({
+          ...line,
+          invoiceId,
+        })
+        .where(eq(invoiceLines.id, line.id));
+      existingLineIds.delete(line.id);
+    } else {
+      await tx.insert(invoiceLines)
+        .values({
+          ...line,
+          invoiceId,
+        });
+    }
+  }
+
+  for (const id of existingLineIds) {
+    await tx.delete(invoiceLines)
+      .where(eq(invoiceLines.id, id));
   }
 }
