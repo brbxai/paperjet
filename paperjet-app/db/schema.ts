@@ -96,6 +96,7 @@ export const namingSeries = pgTable("naming_series", {
     .references(() => tenants.id)
     .notNull(),
   template: text("template").notNull(),
+  partiallyCompletedTemplate: text("partially_completed_template").notNull(),
   lastNumber: integer("last_number").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })

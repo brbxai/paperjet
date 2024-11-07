@@ -1,0 +1,1 @@
+ALTER TABLE "naming_series" ADD COLUMN "partially_completed_template" text NOT NULL;

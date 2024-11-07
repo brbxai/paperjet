@@ -17,8 +17,33 @@ export async function generateDocumentReference(
   date?: Date,
 ): Promise<string> {
   const parts = template.split(".");
-  const generatedParts: string[] = [];
   let nextNumber = 1;
+
+  // Generate a partially completed template
+  const partiallyGeneratedParts: string[] = [];
+  for (const part of parts) {
+    if (part === "YY" || part === "YYYY") {
+      // Current year, or provided date year
+      const year = date
+        ? date.getFullYear().toString()
+        : new Date().getFullYear().toString();
+      const lastDigits = year.slice(-part.length);
+      partiallyGeneratedParts.push(lastDigits);
+    } else if (part === "MM") {
+      // Current month, or provided date month
+      const month = date ? date.getMonth() + 1 : new Date().getMonth() + 1;
+      partiallyGeneratedParts.push(month.toString().padStart(2, "0"));
+    } else if (part === "DD") {
+      // Current day, or provided date day
+      const day = date ? date.getDate() : new Date().getDate();
+      partiallyGeneratedParts.push(day.toString().padStart(2, "0"));
+    } else {
+      // Literal string
+      partiallyGeneratedParts.push(part);
+    }
+  }
+  const partiallyCompletedTemplate = partiallyGeneratedParts.join("");
+  console.log(partiallyCompletedTemplate)
 
   // Attempt to find an existing naming series
   const existingSeries = await trx
@@ -28,6 +53,7 @@ export async function generateDocumentReference(
       and(
         eq(namingSeries.tenantId, tenantId),
         eq(namingSeries.template, template),
+        eq(namingSeries.partiallyCompletedTemplate, partiallyCompletedTemplate),
       ),
     );
 
@@ -45,30 +71,17 @@ export async function generateDocumentReference(
       id: "naming_series_" + ulid(),
       tenantId,
       template,
+      partiallyCompletedTemplate,
       lastNumber: 1,
     });
   }
 
-  for (const part of parts) {
+  const generatedParts: string[] = [];
+  for (const part of partiallyGeneratedParts) {
     if (/#+/.test(part)) {
       // Padded number
       const digitCount = part.length;
       generatedParts.push(nextNumber.toString().padStart(digitCount, "0"));
-    } else if (part === "YY" || part === "YYYY") {
-      // Current year, or provided date year
-      const year = date
-        ? date.getFullYear().toString()
-        : new Date().getFullYear().toString();
-      const lastDigits = year.slice(-part.length);
-      generatedParts.push(lastDigits);
-    } else if (part === "MM") {
-      // Current month, or provided date month
-      const month = date ? date.getMonth() + 1 : new Date().getMonth() + 1;
-      generatedParts.push(month.toString().padStart(2, "0"));
-    } else if (part === "DD") {
-      // Current day, or provided date day
-      const day = date ? date.getDate() : new Date().getDate();
-      generatedParts.push(day.toString().padStart(2, "0"));
     } else {
       // Literal string
       generatedParts.push(part);
