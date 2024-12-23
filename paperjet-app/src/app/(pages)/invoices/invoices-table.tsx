@@ -1,11 +1,11 @@
 "use client";
 
 import { DataTable } from "@/components/ui/data-table";
-import { invoices as invoicesSchema } from "@db/schema";
+import { Invoice } from "@/data/invoices";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-const columns: ColumnDef<typeof invoicesSchema.$inferSelect>[] = [
+const columns: ColumnDef<Invoice>[] = [
   {
     accessorKey: "documentReference",
     header: "Document Reference",
@@ -37,7 +37,7 @@ const columns: ColumnDef<typeof invoicesSchema.$inferSelect>[] = [
 export default function InvoicesTable({
   invoices,
 }: {
-  invoices: (typeof invoicesSchema.$inferSelect)[];
+  invoices: Invoice[];
 }) {
   return <DataTable columns={columns} data={invoices} />;
 }

@@ -3,8 +3,8 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BRBX",
-  description: "A BRBX Application.",
+  title: "Paperjet",
+  description: "A simple yet flexible, open source, invoicing solution for small businesses.",
 };
 
 export default function RootLayout({

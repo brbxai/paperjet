@@ -98,3 +98,37 @@ export const getInvoice: (tenantId: string, id: string) => Promise<SerializedInv
     return acc;
   }, null);
 });
+
+export const serializeInvoice: (invoice: Invoice) => SerializedInvoice = (invoice) => {
+  return {
+    ...invoice,
+    totalAmountBeforeTax: invoice.totalAmountBeforeTax.toString(),
+    taxAmount: invoice.taxAmount.toString(),
+    totalAmountAfterTax: invoice.totalAmountAfterTax.toString(),
+    lines: invoice.lines.map((line) => ({
+      ...line,
+      quantity: line.quantity.toString(),
+      unitPrice: line.unitPrice.toString(),
+      amountBeforeTax: line.amountBeforeTax.toString(),
+      taxAmount: line.taxAmount.toString(),
+      amountAfterTax: line.amountAfterTax.toString(),
+    })),
+  } as SerializedInvoice;
+}
+
+export const deserializeInvoice: (invoice: SerializedInvoice) => Invoice = (invoice) => {
+  return {
+    ...invoice,
+    totalAmountBeforeTax: new Decimal(invoice.totalAmountBeforeTax),
+    taxAmount: new Decimal(invoice.taxAmount),
+    totalAmountAfterTax: new Decimal(invoice.totalAmountAfterTax),
+    lines: invoice.lines.map((line) => ({
+      ...line,
+      quantity: new Decimal(line.quantity),
+      unitPrice: new Decimal(line.unitPrice),
+      amountBeforeTax: new Decimal(line.amountBeforeTax),
+      taxAmount: new Decimal(line.taxAmount),
+      amountAfterTax: new Decimal(line.amountAfterTax),
+    })),
+  } as Invoice;
+}

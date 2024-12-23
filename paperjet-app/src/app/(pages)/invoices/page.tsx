@@ -1,4 +1,4 @@
-import { getInvoices } from "@/data/invoices";
+import { deserializeInvoice, getInvoices } from "@/data/invoices";
 import InvoicesPage from "./invoices-page";
 import { verifySession } from "@/lib/session";
 
@@ -8,7 +8,8 @@ export default async function Invoices() {
     return null;
   }
   const invoices = await getInvoices(session.tenantId);
+  const deserializedInvoices = invoices.map(x => deserializeInvoice(x));
   return (
-    <InvoicesPage invoices={invoices} />
+    <InvoicesPage invoices={deserializedInvoices} />
   );
 }
