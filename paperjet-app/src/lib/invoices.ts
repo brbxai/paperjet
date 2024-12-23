@@ -39,6 +39,7 @@ export const parseInvoiceForFrontend: (invoice: SerializedInvoice) => Invoice = 
 export const createInvoiceLine: (invoiceId: string) => InvoiceLine = (invoiceId) => ({
   id: "inv_line_" + ulid(), // Generate locally, to make tracking easier
   invoiceId,
+  itemId: "",
   description: "",
   quantity: new Decimal(1),
   unitPrice: new Decimal(0),

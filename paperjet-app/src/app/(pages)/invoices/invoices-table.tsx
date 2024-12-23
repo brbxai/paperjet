@@ -30,7 +30,7 @@ const columns: ColumnDef<typeof invoicesSchema.$inferSelect>[] = [
   {
     accessorKey: "totalAmountAfterTax",
     header: "Total Amount",
-    cell: ({ row }) => `$ ${row.original.totalAmountAfterTax}`, // TODO: Format with tenant currency
+    cell: ({ row }) => `€ ${row.original.totalAmountAfterTax}`, // TODO: Format with tenant currency
   },
 ];
 
