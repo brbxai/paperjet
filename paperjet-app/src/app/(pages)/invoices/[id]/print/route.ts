@@ -1,9 +1,20 @@
 import { getCustomer } from "@/data/customers";
-import { getInvoice } from "@/data/invoices";
+import { deserializeInvoice, getInvoice } from "@/data/invoices";
 import { verifySession } from "@/lib/session";
 import { actionFailure } from "@/lib/utils";
 import { format } from "date-fns";
 import { NextResponse } from "next/server";
+import { Decimal } from 'decimal.js';
+
+// Configure Decimal.js
+Decimal.set({ precision: 10, rounding: Decimal.ROUND_HALF_UP });
+
+// Helper function for number formatting
+const formatNumber = (decimal: Decimal) => {
+  const parts = decimal.toFixed(2).split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return parts.join('.');
+};
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
   // Verify user is logged in
@@ -15,12 +26,26 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   const { id } = await params;
 
   // Generate PDF
-  const invoice = await getInvoice(session.tenantId, id);
+  const serializedInvoice = await getInvoice(session.tenantId, id);
+  const invoice = serializedInvoice ? deserializeInvoice(serializedInvoice) : null;
+  
+  // Add formatted variants of the prices
+  const formattedLines = invoice?.lines?.map(line => ({
+    ...line,
+    formattedUnitPrice: formatNumber(line.unitPrice),
+    formattedTaxAmount: formatNumber(line.taxAmount),
+    formattedAmountBeforeTax: formatNumber(line.amountBeforeTax)
+  }));
+
   const json = JSON.stringify({
     html, data: {
       ...invoice,
+      lines: formattedLines,
       formattedIssueDate: invoice?.issueDate ? format(invoice!.issueDate, "dd/MM/yyyy") : null,
       formattedDueDate: invoice?.dueDate ? format(invoice!.dueDate, "dd/MM/yyyy") : null,
+      formattedTotalAmountBeforeTax: invoice?.totalAmountBeforeTax ? formatNumber(invoice.totalAmountBeforeTax) : null,
+      formattedTaxAmount: invoice?.taxAmount ? formatNumber(invoice.taxAmount) : null,
+      formattedTotalAmountAfterTax: invoice?.totalAmountAfterTax ? formatNumber(invoice.totalAmountAfterTax) : null,
       customer: invoice?.customerId ? await getCustomer(session.tenantId, invoice.customerId) : null,
     }
   });
@@ -129,9 +154,9 @@ const html = `
                             <p class="m-0">{{description}}</p>
                         </td>
                         <td class="px-4 py-2 text-right whitespace-nowrap">{{quantity}}</td>
-                        <td class="px-4 py-2 text-right whitespace-nowrap">€ {{unitPrice}}</td>
-                        <td class="px-4 py-2 text-right whitespace-nowrap">€ {{taxAmount}}</td>
-                        <td class="px-4 py-2 text-right whitespace-nowrap"><strong>€ {{amountBeforeTax}}</strong></td>
+                        <td class="px-4 py-2 text-right whitespace-nowrap">€ {{formattedUnitPrice}}</td>
+                        <td class="px-4 py-2 text-right whitespace-nowrap">€ {{formattedTaxAmount}}</td>
+                        <td class="px-4 py-2 text-right whitespace-nowrap"><strong>€ {{formattedAmountBeforeTax}}</strong></td>
                     </tr>
                 {{/lines}}
                 </tbody>
@@ -140,9 +165,9 @@ const html = `
         <div class="mt-5 flex justify-end text-right">
             <table>
                 <tbody>
-                    <tr><td class="pr-8 whitespace-nowrap"><strong>Totaal excl.</strong></td><td class="p-2 pl-0 whitespace-nowrap"> € {{totalAmountBeforeTax}}</td></tr>
-                    <tr><td class="pr-8 whitespace-nowrap"><strong>BTW</strong></td><td class="p-2 pl-0 whitespace-nowrap"> € {{taxAmount}}</td></tr>
-                    <tr class="bg-gray-100"><td class="p-2 pr-8 whitespace-nowrap"><strong>Totaal</strong></td><td class="p-2 pl-0 whitespace-nowrap"> € {{totalAmountAfterTax}}</td></tr>
+                    <tr><td class="pr-8 whitespace-nowrap"><strong>Totaal excl.</strong></td><td class="p-2 pl-0 whitespace-nowrap">€ {{formattedTotalAmountBeforeTax}}</td></tr>
+                    <tr><td class="pr-8 whitespace-nowrap"><strong>BTW</strong></td><td class="p-2 pl-0 whitespace-nowrap">€ {{formattedTaxAmount}}</td></tr>
+                    <tr class="bg-gray-100"><td class="p-2 pr-8 whitespace-nowrap"><strong>Totaal</strong></td><td class="p-2 pl-0 whitespace-nowrap">€ {{formattedTotalAmountAfterTax}}</td></tr>
                 </tbody>
             </table>
         </div>
