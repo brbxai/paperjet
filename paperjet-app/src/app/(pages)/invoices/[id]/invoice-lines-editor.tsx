@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Invoice } from "@/data/invoices";
 import { SerializedItem } from "@/data/items";
-import { calculateInvoiceTotals, createInvoiceLine } from "@/lib/invoices";
+import { createInvoiceLine } from "@/lib/invoices";
 import { formatCurrency } from "@/lib/utils";
 import Decimal from "decimal.js";
 import { Plus, X } from "lucide-react";
@@ -73,25 +73,25 @@ export default function InvoiceLinesEditor({
               <TableCell className="text-right p-0 pl-2">
                 <DecimalInput
                   value={line.quantity}
-                  onChangeDecimal={(v) => onChange(calculateInvoiceTotals({
+                  onChangeDecimal={(v) => onChange({
                     ...invoice,
                     lines: invoice.lines.map((l) => l.id === line.id ? {
                       ...line,
                       quantity: v ?? new Decimal(0),
                     } : l),
-                  }))}
+                  })}
                 />
               </TableCell>
               <TableCell className="text-right p-0 pl-2">
                 <DecimalInput
                   value={line.unitPrice}
-                  onChangeDecimal={(v) => onChange(calculateInvoiceTotals({
+                  onChangeDecimal={(v) => onChange({
                     ...invoice,
                     lines: invoice.lines.map((l) => l.id === line.id ? {
                       ...line,
                       unitPrice: v ?? new Decimal(0),
                     } : l),
-                  }))}
+                  })}
                   onKeyUp={(e) => {
                     // If the user presses tab on the last row, add a new line
                     if (e.key === "Tab" && index === invoice.lines.length - 1) {
@@ -110,10 +110,10 @@ export default function InvoiceLinesEditor({
               <TableCell>
                 <Button
                   variant="ghost"
-                  onClick={() => onChange(calculateInvoiceTotals({
+                  onClick={() => onChange({
                     ...invoice,
                     lines: invoice.lines.filter((l) => l.id !== line.id),
-                  }))}
+                  })}
                 >
                   <X className="size-4" />
                 </Button>
@@ -122,6 +122,11 @@ export default function InvoiceLinesEditor({
           ))}
         </TableBody>
         <TableFooter>
+          <TableRow>
+            <TableCell colSpan={5} className="text-right py-2">Total excl. tax</TableCell>
+            <TableCell className="text-right py-2">{formatCurrency(invoice.totalAmountBeforeTax)}</TableCell>
+            <TableCell />
+          </TableRow>
           <TableRow>
             <TableCell colSpan={5} className="text-right py-2">Total tax</TableCell>
             <TableCell className="text-right py-2">{formatCurrency(invoice.taxAmount)}</TableCell>

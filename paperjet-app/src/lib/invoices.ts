@@ -50,11 +50,12 @@ export const createInvoiceLine: (invoiceId: string) => InvoiceLine = (invoiceId)
 
 export const calculateInvoiceTotals: (invoice: Invoice) => Invoice = (invoice) => {
 
-  const totalAmountBeforeTax = invoice.lines.reduce((acc, line) => acc.plus(line.amountBeforeTax), new Decimal(0)).toDP(2);
+  let totalAmountBeforeTax = new Decimal(0);
 
   let taxAmount = new Decimal(0);
   const lines = invoice.lines.map((line) => {
     const amountBeforeTax = line.quantity.times(line.unitPrice).toDP(2);
+    totalAmountBeforeTax = totalAmountBeforeTax.plus(amountBeforeTax);
     const lineTaxAmount = amountBeforeTax.times(0.21).toDP(2); // TODO: Replace with tax selection
     const amountAfterTax = amountBeforeTax.plus(lineTaxAmount).toDP(2);
     taxAmount = taxAmount.plus(lineTaxAmount);

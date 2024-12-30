@@ -1,11 +1,11 @@
 "use client";
 
 import { DataTable } from "@/components/ui/data-table";
-import { Invoice } from "@/data/invoices";
+import { Invoice, SerializedInvoice } from "@/data/invoices";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-const columns: ColumnDef<Invoice>[] = [
+const columns: ColumnDef<SerializedInvoice>[] = [
   {
     accessorKey: "documentReference",
     header: "Document Reference",
@@ -37,7 +37,7 @@ const columns: ColumnDef<Invoice>[] = [
 export default function InvoicesTable({
   invoices,
 }: {
-  invoices: Invoice[];
+  invoices: SerializedInvoice[];
 }) {
   return <DataTable columns={columns} data={invoices} />;
 }

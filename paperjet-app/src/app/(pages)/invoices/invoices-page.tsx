@@ -6,12 +6,12 @@ import InvoicesTable from "./invoices-table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { NEW_INVOICE_ROUTE } from "@/lib/config/routes";
-import { Invoice } from "@/data/invoices";
+import { SerializedInvoice } from "@/data/invoices";
 
 export default function InvoicesPage({
   invoices,
 }: {
-  invoices: Invoice[] | null;
+  invoices: SerializedInvoice[] | null;
 }) {
   return (
     <DataPage

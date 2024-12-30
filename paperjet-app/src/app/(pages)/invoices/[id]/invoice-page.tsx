@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { upsertInvoice } from "@/actions/invoices/upsert-invoice";
 import { toast } from "sonner"
 import { SerializedInvoice, Invoice } from "@/data/invoices";
-import { parseInvoiceForBackend, parseInvoiceForFrontend } from "@/lib/invoices";
+import { calculateInvoiceTotals, parseInvoiceForBackend, parseInvoiceForFrontend } from "@/lib/invoices";
 import { useRouter } from "next/navigation";
 import { invoiceRoute, printInvoiceRoute } from "@/lib/config/routes";
 import { Customer } from "@/data/customers";
@@ -89,7 +89,7 @@ export default function InvoicePage({
         <InvoiceLinesEditor
           invoice={invoice}
           items={items}
-          onChange={(inv) => setInvoice(inv)}
+          onChange={(inv) => setInvoice(calculateInvoiceTotals(inv))}
         />
       </InputGroup>
     </DataPage>
