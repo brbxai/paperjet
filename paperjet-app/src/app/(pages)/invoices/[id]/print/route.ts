@@ -126,7 +126,7 @@ const html = `
                 {{#lines}}
                     <tr class="border-t border-gray-200">
                         <td class="px-4 py-2">
-                            <p class="m-0"><strong>{{description}}</strong></p>
+                            <p class="m-0">{{description}}</p>
                         </td>
                         <td class="px-4 py-2 text-right whitespace-nowrap">{{quantity}}</td>
                         <td class="px-4 py-2 text-right whitespace-nowrap">€ {{unitPrice}}</td>
