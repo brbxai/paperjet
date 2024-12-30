@@ -116,10 +116,10 @@ const html = `
                 <thead class="text-left border-b border-gray-300">
                     <tr>
                         <th class="px-4 py-2">Omschrijving</th>
-                        <th class="px-4 py-2 text-right">Aantal</th>
-                        <th class="px-4 py-2 text-right">Prijs</th>
-                        <th class="px-4 py-2 text-right">BTW</th>
-                        <th class="px-4 py-2 text-right">Totaal excl.</th>
+                        <th class="px-4 py-2 text-right whitespace-nowrap" style="min-width: 80px">Aantal</th>
+                        <th class="px-4 py-2 text-right whitespace-nowrap" style="min-width: 100px">Prijs</th>
+                        <th class="px-4 py-2 text-right whitespace-nowrap" style="min-width: 100px">BTW</th>
+                        <th class="px-4 py-2 text-right whitespace-nowrap" style="min-width: 120px">Totaal excl.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,10 +128,10 @@ const html = `
                         <td class="px-4 py-2">
                             <p class="m-0"><strong>{{description}}</strong></p>
                         </td>
-                        <td class="px-4 py-2 text-right">{{quantity}}</td>
-                        <td class="px-4 py-2 text-right">€ {{unitPrice}}</td>
-                        <td class="px-4 py-2 text-right">€ {{taxAmount}}</td>
-                        <td class="px-4 py-2 text-right"><strong>€ {{amountBeforeTax}}</strong></td>
+                        <td class="px-4 py-2 text-right whitespace-nowrap">{{quantity}}</td>
+                        <td class="px-4 py-2 text-right whitespace-nowrap">€ {{unitPrice}}</td>
+                        <td class="px-4 py-2 text-right whitespace-nowrap">€ {{taxAmount}}</td>
+                        <td class="px-4 py-2 text-right whitespace-nowrap"><strong>€ {{amountBeforeTax}}</strong></td>
                     </tr>
                 {{/lines}}
                 </tbody>
@@ -140,9 +140,9 @@ const html = `
         <div class="mt-5 flex justify-end text-right">
             <table>
                 <tbody>
-                    <tr><td class="pr-8"><strong>Totaal excl.</strong></td><td class="p-2 pl-0"> € {{totalAmountBeforeTax}}</td></tr>
-                    <tr><td class="pr-8"><strong>BTW</strong></td><td class="p-2 pl-0"> € {{taxAmount}}</td></tr>
-                    <tr class="bg-gray-100"><td class="p-2 pr-8"><strong>Totaal</strong></td><td class="p-2 pl-0"> € {{totalAmountAfterTax}}</td></tr>
+                    <tr><td class="pr-8 whitespace-nowrap"><strong>Totaal excl.</strong></td><td class="p-2 pl-0 whitespace-nowrap"> € {{totalAmountBeforeTax}}</td></tr>
+                    <tr><td class="pr-8 whitespace-nowrap"><strong>BTW</strong></td><td class="p-2 pl-0 whitespace-nowrap"> € {{taxAmount}}</td></tr>
+                    <tr class="bg-gray-100"><td class="p-2 pr-8 whitespace-nowrap"><strong>Totaal</strong></td><td class="p-2 pl-0 whitespace-nowrap"> € {{totalAmountAfterTax}}</td></tr>
                 </tbody>
             </table>
         </div>
