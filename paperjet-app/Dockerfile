@@ -27,6 +27,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN bun run build
+RUN bun build ./db/migrate.ts --compile --outfile ./db/dbmigrate
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -49,6 +50,8 @@ RUN chown nextjs:nodejs .next
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/db ./db
+COPY --from=builder --chown=nextjs:nodejs /app/entrypoint.sh ./
 
 USER nextjs
 
@@ -59,4 +62,4 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+CMD ["sh", "entrypoint.sh"]
